@@ -1,0 +1,187 @@
+% ------------------------------------------------------------------------ %
+% !TEX encoding = UTF-8 Unicode
+% !TEX TS-program = pdflatex
+% !TEX root = ../Tesi.tex
+% !TEX spellcheck = it-IT
+% ------------------------------------------------------------------------ %
+%
+% ------------------------------------------------------------------------ %
+%   NOME APPENDICE 4
+% ------------------------------------------------------------------------ %
+%
+\chapter{Script di configurazione}
+%
+\label{cap:codici}
+%
+Questo capitolo conterrà tutti gli script di configurazione, utilizzati nell'ambito dell'implementazione dell'applicazione e citati nel capitolo \autoref{cap:implementazione}.
+%
+\section{Vagrant}
+%
+\label{cap:vagrantConfig}
+%
+Il VagrantFile utilizzato nello sviluppo:\newline
+\begin{center}
+	\begin{lstlisting}[language=ruby,caption={VagrantFile del progetto},captionpos=b,frame=lines,basicstyle=\linespread{0.9}\small]
+Vagrant.configure(2) do |config|
+  config.vm.box = "ubuntu/xenial64"
+  config.vm.provision :shell, path: "vagrant/bootstrap.sh"
+  config.vm.network "forwarded_port", guest: 22000, host: 22000
+  config.vm.network "forwarded_port", guest: 22001, host: 22001
+  config.vm.network "forwarded_port", guest: 22002, host: 22002
+  config.vm.network "forwarded_port", guest: 22003, host: 22003
+  config.vm.network "forwarded_port", guest: 22004, host: 22004
+  config.vm.network "forwarded_port", guest: 22005, host: 22005
+  config.vm.network "forwarded_port", guest: 22006, host: 22006
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 4096
+  v.gui = false
+  end
+end
+	\end{lstlisting}
+\end{center}
+%
+Invece il file bootstrap.sh utilizzato per configurare le dipendenze software della blokchain è il seguente:
+\newline
+\begin{center}\begin{lstlisting}[language=sh,caption={Script di bootstrap utilizzato dal Vagrantfile},captionpos=b,frame=lines,basicstyle=\linespread{0.9}\small]
+	#!/bin/bash
+							      
+	set -eu -o pipefail
+							      
+	# install build deps
+	add-apt-repository ppa:ethereum/ethereum
+	apt-get update
+	apt-get install -y build-essential unzip libdb-dev libsodium-dev zlib1g-dev libtinfo-dev solc sysvbanner wrk
+							      
+	# install constellation
+	wget -q https://github.com/jpmorganchase/constellation/releases/download/v0.0.1-alpha/ubuntu1604.zip
+	unzip ubuntu1604.zip
+	cp ubuntu1604/constellation-node /usr/local/bin && chmod 0755 /usr/local/bin/constellation-node
+	cp ubuntu1604/constellation-enclave-keygen /usr/local/bin && chmod 0755 /usr/local/bin/constellation-enclave-keygen
+	rm -rf ubuntu1604.zip ubuntu1604
+							      
+	# install golang
+	GOREL=go1.7.3.linux-amd64.tar.gz
+	wget -q https://storage.googleapis.com/golang/$GOREL
+	tar xfz $GOREL
+	mv go /usr/local/go
+	rm -f $GOREL
+	PATH=$PATH:/usr/local/go/bin
+	echo 'PATH=$PATH:/usr/local/go/bin' >> /home/ubuntu/.bashrc
+							      
+	# make/install quorum
+	git clone https://github.com/jpmorganchase/quorum.git
+	pushd quorum >/dev/null
+	git checkout tags/v1.1.0
+	make all
+	cp build/bin/geth /usr/local/bin
+	cp build/bin/bootnode /usr/local/bin
+	popd >/dev/null
+							      
+	# copy examples
+	cp -r /vagrant/examples /home/ubuntu/quorum-examples
+	chown -R ubuntu:ubuntu /home/ubuntu/quorum /home/ubuntu/quorum-examples
+	\end{lstlisting}
+	%
+\end{center}
+%
+\section{Blockchain Quorum}
+%
+\label{cap:quorumCode}
+%
+Il file \emph{init.sh} è stato riorganizzato in maniera tale da avere all'avvio della blockchain due account sul nodo target 1:
+\begin{center}
+	\begin{lstlisting}[language=sh,caption={Script di inizializzazione della blockchain Quorum},captionpos=b,frame=lines,basicstyle=\linespread{0.8}\small]
+	#!/bin/bash
+	set -u
+	set -e
+
+	echo "[*] Cleaning up temporary data directories"
+	rm -rf qdata
+	mkdir -p qdata/logs
+
+	echo "[*] Configuring node 1"
+	mkdir -p qdata/dd1/keystore
+	cp keys/key1 qdata/dd1/keystore
+	cp keys/key2 qdata/dd1/keystore
+	geth --datadir qdata/dd1 init genesis.json
+
+	echo "[*] Configuring node 2 as block maker and voter"
+	mkdir -p qdata/dd2/keystore
+	cp keys/key2 qdata/dd2/keystore
+	cp keys/key3 qdata/dd2/keystore
+	geth --datadir qdata/dd2 init genesis.json
+
+	echo "[*] Configuring node 3"
+	mkdir -p qdata/dd3/keystore
+	geth --datadir qdata/dd3 init genesis.json
+
+	echo "[*] Configuring node 4 as voter"
+	mkdir -p qdata/dd4/keystore
+	cp keys/key4 qdata/dd4/keystore
+	geth --datadir qdata/dd4 init genesis.json
+
+	echo "[*] Configuring node 5 as voter"
+	mkdir -p qdata/dd5/keystore
+	geth --datadir qdata/dd5 init genesis.json
+
+	echo "[*] Configuring node 6"
+	mkdir -p qdata/dd6/keystore
+	geth --datadir qdata/dd6 init genesis.json
+
+	echo "[*] Configuring node 7"
+	mkdir -p qdata/dd7/keystore
+	geth --datadir qdata/dd7 init genesis.json
+	\end{lstlisting}
+\end{center}
+Invece, il file start.sh è stato riscritto per avere i nodi configurati secondo le necessità dell'applicazione:
+\begin{center}
+	\begin{lstlisting}[language=sh,caption={Script di avvio della blockchain Quorum},captionpos=b,frame=lines,basicstyle=\linespread{0.8}\small]
+	#!/bin/bash
+	set -u
+	set -e
+	NETID=87234
+	BOOTNODE_KEYHEX=77bd02ffa26e3fb8f324bda24ae588066f1873d95680104de5bc2db9e7b2e510
+	BOOTNODE_ENODE=enode://61077a284f5ba7607ab04f33cfde2750d659ad9af962516e159cf6ce708646066cd927a900944ce393b98b95c914e4d6c54b099f568342647a1cd4a262cc0423@[127.0.0.1]:33445
+
+	GLOBAL_ARGS="--bootnodes $BOOTNODE_ENODE --networkid $NETID --rpc --rpcaddr 0.0.0.0 --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum"
+
+	echo "[*] Starting Constellation nodes"
+	nohup constellation-node tm1.conf 2>> qdata/logs/constellation1.log &
+	sleep 1
+	nohup constellation-node tm2.conf 2>> qdata/logs/constellation2.log &
+	nohup constellation-node tm3.conf 2>> qdata/logs/constellation3.log &
+	nohup constellation-node tm4.conf 2>> qdata/logs/constellation4.log &
+	nohup constellation-node tm5.conf 2>> qdata/logs/constellation5.log &
+	nohup constellation-node tm6.conf 2>> qdata/logs/constellation6.log &
+	nohup constellation-node tm7.conf 2>> qdata/logs/constellation7.log &
+
+	echo "Bootnode"
+	nohup bootnode --nodekeyhex "$BOOTNODE_KEYHEX" --addr="127.0.0.1:33445" 2>>qdata/logs/bootnode.log &
+	echo "wait for bootnode to start..."
+	sleep 6
+
+	echo "Node 1"
+	PRIVATE_CONFIG=tm1.conf nohup geth --datadir qdata/dd1 $GLOBAL_ARGS --rpcport 22000 --port 21000 --unlock "0xed9d02e382b34818e88b88a309c7fe71e65f419d" --password passwords.txt --voteaccount "0x0638e15747$
+
+	echo "Node 2"
+	PRIVATE_CONFIG=tm2.conf nohup geth --datadir qdata/dd2 $GLOBAL_ARGS --rpcport 22001 --port 21001 --voteaccount "0x0fbdc686b912d7722dc86510934589e0aaf3b55a" --votepassword "" --blockmakeraccount "0xca8435$
+
+	echo "Node 3"
+	PRIVATE_CONFIG=tm3.conf nohup geth --datadir qdata/dd3 $GLOBAL_ARGS --rpcport 22002 --port 21002 2>>qdata/logs/3.log &
+
+	echo "Node 4"
+	PRIVATE_CONFIG=tm4.conf nohup geth --datadir qdata/dd4 $GLOBAL_ARGS --rpcport 22003 --port 21003 --voteaccount "0x9186eb3d20cbd1f5f992a950d808c4495153abd5" --votepassword "" 2>>qdata/logs/4.log &
+
+	echo "Node 5"
+	PRIVATE_CONFIG=tm5.conf nohup geth --datadir qdata/dd5 $GLOBAL_ARGS --rpcport 22004 --port 21004 2>>qdata/logs/5.log &
+
+	echo "Node 6"
+	PRIVATE_CONFIG=tm6.conf nohup geth --datadir qdata/dd6 $GLOBAL_ARGS --rpcport 22005 --port 21005 2>>qdata/logs/6.log &
+
+	echo "Node 7"
+	PRIVATE_CONFIG=tm7.conf nohup geth --datadir qdata/dd7 $GLOBAL_ARGS --rpcport 22006 --port 21006 2>>qdata/logs/7.log &
+
+	echo "Nodes Up. Blockchain up. Run 'geth attach qdata/dd1/geth.ipc' to attach to the first Geth node"
+	\end{lstlisting}
+\end{center}
+Nella blockchain appena deployata si può notare come ogni nodo possieda un'istanza di geth (ovvero è un full node)

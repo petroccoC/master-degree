@@ -1,0 +1,79 @@
+%
+% !TEX encoding = UTF-8 Unicode
+% !TEX TS-program = pdflatex
+% !TEX root = Tesi.tex
+% !TEX spellcheck = it-IT
+%
+% \addcontentsline{toc}{chapter}{Glossario}
+%
+\newglossaryentry{dematerializzazione}
+{
+	name=Dematerializzazione,
+	description={Processo di innovazione tecnologica che prevede la conversione di qualunque documento cartaceo in un adeguato formato digitale, fruibile con mezzi informatici, finalizzata alla distruzione della materialità. Il risultato è una stringa digitale che soddisfa i requisiti tecnici e legali previsti per ciascun tipo di documento elettronico nominato (per esempio, la "ricetta elettronica") o, in termini più estesi, le convenzioni stabilite dalla comunità nella quale il documento assume pieno valore.}
+}
+%%%%
+\newglossaryentry{EHR-SF}
+{
+	name=EHR-S,
+	description={L’Electronic Health Record – System Functional Model è uno degli standard realizzati da HL7 International ed è approvato, inoltre, da ISO come ISO/HL7 10781. Il modello
+	comprende 322 funzioni e 2.310 criteri di conformità formali.}
+}
+%%%%
+\newglossaryentry{ricetta bianca}
+{
+	name=Ricetta bianca,
+	description={ricetta che il medico compila su carta bianca, sulla quale siano però riportati: il nome e cognome del medico; la data; il luogo; la firma autografa del medico. In questo caso, il nome dell’assistito non è strettamente necessario. Su ricetta bianca possono essere prescritte tutte le prestazioni di specialistica ambulatoriale, di diagnostica strumentale e di laboratorio, di norma correlate alla propria branca di specializzazione e i farmaci, prestazioni che saranno sempre a carico del cittadino assistito. Per la prescrizione a carico del servizio sanitario è infatti necessaria la ricetta del ricettario regionale ed è valida in tutte le farmacie italiane.}
+}
+%%%
+\newglossaryentry{ricetta rossa}
+{
+	name=Ricetta rossa,
+	description={ricetta che può essere compilata solamente dai medici dipendenti di strutture pubbliche o convenzionati con il servizio sanitario nazionale e viene utilizzata per la prescrizione di una terapia farmacologica, la prescrizione di un esame diagnostico o una visita specialistica a carico del servizio sanitario. L’uso di una ricetta rossa non permette l’erogazione a carico del servizio sanitario di farmaci o prodotti parafarmaceutici non compresi tra le formulazioni del prontuario farmaceutico regionale, né di esami, visite o terapie non comprese nei Lea o nelle disposizioni della propria regione.}
+}
+%%%%
+\newglossaryentry{asimmetrica}
+{
+	name={Cifratura asimmetrica},
+	description={tecnica di cifratura in cui chiave di crittazione e chiave di decrittazione sono diverse ma complementari, ossia un messaggio cifrato con la prima pu` o essere decifrato con la seconda e viceversa; in questo caso ogni utente possiede una coppia di chiavi, una pubblica (nota a tutti) ed una privata (nota solo a se stesso) e per questo, dati N utenti, l’insieme complessivo di chiavi è numericamente pari a \emph{2xN}. È una tecnica di cifratura più sicura rispetto a quella simmetrica, ma allo stesso tempo computazionalmente più complessa}
+}
+%%%%%
+\newglossaryentry{simmetrica}
+{
+	name={Cifratura simmetrica},
+	description={tecnica di cifratura tale per cui chiave di crittazione e chiave di decrittazione coincidono, rendendo l’algoritmo molto performante e semplice da implementare; in questo scenario, ogni chiave identifica una coppia di utenti e per questo, dati N utenti, l’insieme complessivo di chiavi definite ha cardinalità: $\binom{N}{2}$}
+}
+%%%%
+\newglossaryentry{dos}
+{
+	name={Attacco DoS},
+	description={attacco informatico che mira a saturare una o più risorse di rete (inviandogli numerose richieste) con lo scopo, solitamente, di rendere un server incapace di erogare servizi ai propri clienti. Se la richiesta proviene da diversi siti contemporaneamente, si parla di \emph{Attacco DDoS} (Distributed Denial of Service)}
+}
+%%%%%
+\newglossaryentry{hash}
+{
+	name={Hash crittografico},
+	description={algoritmo matematico che mappa dei dati di lunghezza arbitraria (messaggio) in una stringa binaria di dimensione fissa chiamata valore di hash, ma spesso viene indicata anche con il termine inglese message digest (o semplicemente digest). Tale funzione di hash è progettata per essere unidirezionale (one-way), ovvero una funzione difficile da invertire: l'unico modo per ricreare i dati di input dall'output di una funzione di hash ideale è quello di tentare una ricerca di forza-bruta di possibili input per vedere se vi è corrispondenza (match). In alternativa, si potrebbe utilizzare una tabella arcobaleno di hash corrispondenti. La funzione di hash deve avere alcune proprietà fondamentali:
+		\begin{itemize}
+			\item il calcolo dell'hash deve essere semplice indipendentemente dal dato di partenza.
+			\item deve essere difficile se non impossibile risalire al dato originario dall'hash.
+			\item deve essere improbabile che due messaggi differenti abbiano lo stesso hash
+		\end{itemize} 
+	}
+}
+%
+\newglossaryentry{pgp}
+{
+	name={Pretty Good Privacy (PGP)},
+	description={è una famiglia di software di crittografia per autenticazione e privacy, da cui è derivato lo standard OpenPGP. È probabilmente il crittosistema più adottato al mondo, descritto dal crittografo Bruce Schneier come il modo per arrivare "probabilmente il più vicino alla crittografia di livello militare". Caratteristica principale: robusto ad attacchi MITM (man in the middle). Per esempio con il metodo forza bruta l’attaccante necessiterebbe di un calcolatore con immense capacità di calcolo e di tempi di elaborazioni “universali” (ammesso che il dispositivo che conserva messaggio e chiave privata del mittente non sia compromesso). Funzionamento: il mittente usa la chiave pubblica (cifratura asimmetrica) del destinatario per cifrare una chiave comune (cifratura simmetrica) con cui si cifra il testo in chiaro del messaggio}
+}
+%%%%%
+\newglossaryentry{qrcode}
+{
+	name={Qr-code},
+	description={Un codice QR (abbreviazione di Quick Response Code) è un codice a barre bidimensionale (o codice 2D), composto da moduli neri disposti all'interno di uno schema di forma quadrata. Viene impiegato per memorizzare informazioni generalmente destinate a essere lette tramite un telefono cellulare o uno smartphone. In un solo crittogramma possono essere contenuti fino a 7.089 caratteri numerici o 4.296 alfanumerici. Genericamente il formato matriciale è di 29x29 quadratini e contiene 48 alfanumerici. Il codice è stato sviluppato al fine di permettere una rapida decodifica del suo contenuto}
+}%%%%
+\newglossaryentry{permissioned}
+{
+	name={Permissioned Ledger},
+	description={Un sistema \emph{permissioned} è quello in cui l'identità per gli utenti è autorizzata nella whitelist (o nella black list); è il metodo comune di gestione dell'identità nella finanza tradizionale. Al contrario, un sistema privo di autorizzazioni è quello in cui l'identità dei partecipanti è caratterizzata da pseudonimi o addirittura anonima. Bitcoin è stato originariamente progettato con parametri privi di permessi.}
+}%%%%

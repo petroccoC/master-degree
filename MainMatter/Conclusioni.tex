@@ -1,0 +1,55 @@
+% ------------------------------------------------------------------------ %
+% !TEX encoding = UTF-8 Unicode
+% !TEX TS-program = pdflatex
+% !TEX root = ../Tesi.tex
+% !TEX spellcheck = it-IT
+% ------------------------------------------------------------------------ %
+%
+% ------------------------------------------------------------------------ %
+% 	NOME CAPITOLO
+% ------------------------------------------------------------------------ %
+%
+\chapter{Considerazioni sulla sicurezza \& conclusioni}
+%
+\label{cap:conclusioni}
+%
+\section{Sicurezza}
+%
+Quello realizzato nel corso dell'attività di tesi è un prototipo di un'applicazione per ricette mediche bianche dematerializzate che risponde ai \emph{Requisiti centrati sulle informazioni}\footnote{Modello CIA}ovvero quei requisiti informali che esprimono come dovrebbero essere gestite le informazioni all'interno di un sistema informatico. Questi requisiti sono:
+\begin{enumerate}
+	\item \emph{confidenzialità}: le informazioni devono essere accessibili solo a coloro che sono autorizzati. Questo è stato realizzato mediante l'utilizzo di una blockchain permissione privata che supporta sia transazioni pubbliche e private e non è interrogabile dall'esternon se non previa autorizzazione dell'autorità di supervisione. Inoltre il dato sensibile corrispondente al contenuto della ricetta elettronica non viaggia mai in chiaro sulla blockchain, ma quello che vedrebbe un eventuale utente malevolo sarebbe l'hash della ricetta.
+	\item \emph{integrità}: le informazioni possono essere modificate solo da coloro che sono autorizzati. Questo requisito viene gestito a livello di logica di contratto tramite i modifier di accesso che vengono preposti alle transazioni quando si va ad interagire con l'inserimento della ricetta nella blockchain. L'applicazione supporta una divisione di ruoli che può essere eventualmente estesa per adattarsi alle nuove esigenze applicative.
+	\item \emph{disponibilità}: le informazioni devono essere sempre accessibili in qualsiasi momento a coloro che ne hanno l'autorità o il permesso. Questa è una proprietà intrinseca della blockchain, data la sua natura decentralizzata.
+\end{enumerate}
+Inoltre l'applicazione risponde ai \emph{requisiti centrati sulle persone}\footnote{Modello AAA} ovvero quei requisiti informali che esprimono i vincoli a cui dovrebbero essere soggetti gli individui che interagiscono con i sistemi informatici. Questi requisiti sono:
+\begin{enumerate}
+	\item \emph{autenticazione}: le persone devono provare la loro identità. Questo requisito viene supportato dalla tipica gestione degli account nella blockchain che sono identificati ed agiscono mediante la loro coppia di chiave pubblica-chiave privata. Ogni browser verrà configurato per utilizzare un solo account precedentemente autorizzato e le chiavi saranno conservate in modo sicuro. Al momento della scrittura del lavoro di tesi i modi possibili per raggiungere questo scopo sono:
+	      \begin{itemize}
+	      	\item  l'utilizzo di un programma denominato "Metamask" compatibile con i maggiori browser in commercio, che permette di interagire con la blockchain dopo aver correttamente importato l'account mediante la chiave privata corrispondente (questo è possibile perchè in Metamask è capace di iniettare la sessione di web3.js all'interno del browser, permettendo così di effettuare transazioni da e verso la blockchain tramite l'account configurato in esso). Metamask è un programma di tipo "sandbox" ovvero una volta che è stata importata la chiave privata, se questa viene perduta risulta impossibile recuperarla tramite questo programma. 
+	      	\item l'utilizzo di un browser modificato denominato "Mist". Attualmente si presenta come la principale alternativa ai browser in commercio. Mist ha già integrate tutte le librerie necessare per dialogare ed interagire con le blockchain e le applicazioni decentralizzate su di essa senza l'aggiunta di ulteriori programmi. A suo svantaggio va il fatto che deve essere configurato per interagire con le blockchain private (può risultare problematico) e rimane un programma con cui l'utente non ha familiarità.
+	      \end{itemize}
+	\item \emph{autorizzazione}. Le persone devono poter accedere ad una risorsa solo se autorizzate. Questo viene gestito ed implementato nella logica di contratto a livello di ruolo del singolo account.
+	\item \emph{non ripudio}. Le persone devono essere responsabili delle proprie azioni e, in particolare, non possono negare quanto affermato precedentemente. Questo viene intrinsecamente supportato dalla blockchain in quanto ogni transazione viene firmata dal mittente (che sia essa pubblica o privata). Inoltre nel contratto sono state inseriti delle strutture dati come ulteriore traccia delle associazioni tra ruolo-account e account-ricetta.
+\end{enumerate}
+%
+\subsection{Application server}
+All'interno dell'architettura decentralizzata è stata valutato ed implementato un elemento application server, un elemento tipico delle architetture client-server. Questa scelta che in prima istanza sembra vada ad inficiare l'implementazione decentralizzata è risultato necessario per questioni di sicurezza. Infatti il codice lato client, nonostante tutte le tecniche per pervenire XSS\footnote{Cross-Site-Scripting} e di offuscamento del codice, risulta sempre vulnerabile all'injection tramite la console del browser. Allora la logica di generazione della ricetta elettronica è stata spostata server-side (Express) al fine di evitare la modifica della logica di generazione di ricetta dematerializzata da parte di un utente malevolo e preservare così l'integrità dei file generati dal medico. Lo svantaggio di questa entità è che si comporta a tutti gli effetti come un \emph{Single point of failure} ed è necessario prendere provvedimenti al livello di:
+\begin{itemize}
+	\item gestione del carico del server tramite l'inserimento di load balancer (evitare i colli di bottiglia).
+	\item gestione della disponibilità del server in caso di \gls{dos}\footnote{Denial of service} tramite l'applicazione di tecniche di tolleranza ai guasti (tecniche di replicazione e duplicazione).
+\end{itemize}
+%
+\section{Conclusioni}
+%
+La scelta di una blockchain privata come Quorum, anche se complessa dal punto di vista della configurazione, risulta estremamente versatile nella gestione di sistemi complessi decentralizzati in cui sono necessarie determinati livelli di sicurezza. Inoltre si presenta anche come una valida soluzione per sviluppare software blockchain-based la cui logica risieda all'interno di contratti che vengono eseguiti sulla stessa blockchain dato che contiene dentro di se tutte le feature di Ethereum. \\
+Inoltre l'utilizzo della tecnologia della blockchain si presenta come una valida alternativa all'utilizzo dei database tradizionali perchè sotto determinati requisiti riesce ad offrire maggiori garanzie rispetto ad essi. Infatti, anche se presente un'entità supervisionante, non sono presenti intermediari durante l'interazione tra gli attori principali del sistema (medici e farmacisti) e chiunque possiede l'autorizzazione (sia di ruolo che di peer) può interagire con le informazioni sulla blockchain mentre questo non è possibile nei database tradizionali dove solo l'autorità centrale può accedere ai nostri dati. \\
+Inoltre, mentre nei database tradizioni risulta necessario applicare attivamente tecniche di replicazione e di tolleranza ai guasti, nella blockchain questo è intrinseco nell'architettura stessa. Perciò la scelta riguardante quale tecnologia da utilizzare deve essere presa in relazione agli obiettivi che si vogliono raggiungere.
+\subsection{Soluzione offerta}
+Nel merito dell'applicazione implementata per la gestione di ricette elettroniche dematerializzate sono stati raggiunti i seguenti obiettivi principali:
+\begin{itemize}
+	\item \textit{\textbf{performance}}: rispetto alla controparte pubblica una blockchan privata offre performance maggiori in quanto utilizza meccanismi di consenso più adatti ad un ambiente permissioned e meno pesanti computazionalmente come la POW.
+	\item \textit{\textbf{disponibilità}}: essendo una struttura di tipo peer-to-peer che cresce con l'aumentare degli utenti che partecipano all'attività al suo interno la possibilità di avere informazioni sempre disponibili aumenta.
+	\item \textit{\textbf{aggiornamento}}: la blockchain risulta sempre aggiornata perchè le transazioni vengono sempre propagate attraverso i nodi, siano esse pubbliche o private.
+	\item \textit{\textbf{affidabilità}}: il corretto funzionamento delle attività di mining viene supervisionato da un entità garante soprattutto nel caso di informazioni sensibili come i dati medico-sanitari.
+	\item \textit{\textbf{resilienza ai guasti}}: la blockchain è intrinsecamente resiliente ai guasti.
+\end{itemize}

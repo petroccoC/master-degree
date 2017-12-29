@@ -1,0 +1,64 @@
+% ------------------------------------------------------------------------ %
+% !TEX encoding = UTF-8 Unicode
+% !TEX TS-program = pdflatex
+% !TEX root = ../Tesi.tex
+% !TEX spellcheck = it-IT
+% ------------------------------------------------------------------------ %
+%
+% ------------------------------------------------------------------------ %
+% 	INTRODUZIONE
+% ------------------------------------------------------------------------ %
+%
+\cleardoublepage
+%
+\phantomsection
+%
+\chapter{Introduzione}
+%
+\markboth{Introduzione}{Introduzione}	% headings
+%
+\label{cap:introduzione}
+%
+In poco meno di vent'anni si è passati dal floppy disk al cd e, da questo, alla chiave usb e ad altri tipi di supporti portatili di memoria, fino ad arrivare al cloud computing, eliminando di fatto la necessità del supporto fisico per produrre e preservare i dati, le informazioni e i documenti digitali. L'affermarsi continua di nuove tecnologie ha quindi modificato la concezione del \emph{documento}, in particolar modo della sua creazione e conservazione. \\	
+Se fino agli anni ’90 si aveva  una visione più ristretta e univoca del document management, che sostanzialmente coincideva con la digitalizzazione di immagini e l’archiviazione ottica di documenti nati originariamente su supporti analogici (prevalentemente cartacei), negli anni 2000 si è passati al concetto già più complesso di \emph{Gestione documentale e conservazione sostitutiva} ovvero la sostituzione del documento cartaceo con l'equivalente documento digitale. Infatti con la \gls{dematerializzazione} il contenuto del documento viene “cristallizzato” grazie all’utilizzo della firma digitale e della marca temporale\footnote{Garantendone così la sopravvivenza nel tempo come originale “autenticamente” digitale attraverso un sistema di conservazione a norma}. Oggi, invece, ci confrontiamo ormai con processi sempre più nativamente digitali dove non c’è più traccia dell’immagine della carta. D'altro canto, l'abbandono di supporti "analogici" in favore di strumenti digitali ha portato l'utente e i suoi documenti ad essere oggetto di numerose trappole in più. Se è vero che le tecnologie di conservazione e digitalizzazione hanno portato notevoli risparmi sia a livello di risorse utilizzate come carta, inchiosto e ore lavoro delle persone davanti alle stampanti, sia a livello di produttività personale essendo i documenti digitali disponibili istantaneamente è altresì vero che il rischio della falsificazione di documenti è un problema tutt'altro che remoto. Per poter, quindi, gestire correttamente queste nuove tipologie di documenti e informazioni rilevanti bisogna adottare specifici modelli e metodologie finalizzati a garantire l’attribuibilità, l’integrità, l’autenticità e la sicurezza nel tempo del complesso dei documenti digitalizzati. \\ 
+Questa spinta verso nuovi processi digitali ha portato il Governo ad interessarsi verso la documentazione digitale arrivando ad emanare il decreto legislativo 82/2005 riguardante il \emph{Codice dell'Amministrazione digitale}\autocite{caddlg} che sancisce la definizione di:
+\begin{itemize}
+	\item \emph{documento analogico}: rappresentazione non informatica di atti, fatti o dati giuridicamente rilevanti.
+	\item \emph{documento informatico}: rappresentazione informatica di atti, fatti o dati giuridicamente rilevanti. Viene inquadrato come elemento centrale di quel processi di innovazione finalizzati alla completa digitalizzazione delle pratiche amministrative e viene dato pieno valore giuridico al processo di dematerializzazione.
+\end{itemize}
+Infine il Governo, tramite l'Agenzia per l'Italia Digitale (AgID), pubblica un whitepaper riguardante la dematerializzazione della documentazione tramite supporti digitali.\autocite{whtpaperdema}
+\subsubsection{Obiettivi della tesi}
+In questo lavoro di tesi viene proposto un approccio alla digitalizzazione e alla conservazione di un documento sensibile quale la \emph{ricetta medica}, basato sull'utilizzo della Blockchain, una tecnologia affermatasi recentemente e che sta riscuotendo notevole successo nei più svariati campi applicativi, dallo scambio di moneta digitale alla stipulazione di contratti, dalla gestione di dati sanitari alla pubblica amministrazione. L'avvento di questa tecnologia sta provocando notevole hype ed ottimismo e viene celebrata come una vera e propria rivoluzione tecnologia. \\
+Il prototipo di applicazione per la gestione delle ricette bianche dematerializzate è basato sull'utilizzo di una determinata tipologia di blockchain, quelle private ed offre le seguenti caratteristiche:
+\begin{itemize}
+	\item Meccanismi di garanzia di autenticità e validità delle ricette mediche dematerializzate;
+	\item Elevata affidabilità e tolleranza ai guasti del sistema;
+	\item Accorgimenti specifici per il trattamento dei dati (sensibili).
+\end{itemize}
+%
+\clearpage
+%
+\subsection*{Struttura}
+%
+\par Il testo della tesi è così strutturato:
+%
+\begin{description}
+	%2
+	\item[{\hyperref[cap:sanitàdigitale]{Nel primo capitolo}}] viene delineato lo stato dell'arte della sanità digitale in Italia. Viene descritto il Fascicolo Sanitario Elettronico (FSE) e la sua composizione, per poi passare alla ricettazione elettronica (che consiste in una delle principali fonti di dati per il FSE). Viene infine descritto il sistema di ricettazione elettronica delle Regione Marchie come caso di studio da cui partire per superare le criticità del sistema attuale.
+	%3
+	\item[{\hyperref[cap:blockchain]{Il secondo capitolo}}] viene descritta la tecnologia che si è scelto di utilizzare nel presente lavoro di tesi ovvero la Blockchain. In particolare si illustra il suo funzionamento generale prima di passare alla descrizione della particolare tipologia di blockchain utilizzata nel presente lavoro di Tesi. Infine vengono descritte le attuali limitazioni della tecnologia per l'implementazioni di applicazioni decentralizzate complesse o con particolari requisiti di sicurezza.
+	%4
+	\item[{\hyperref[cap:ethereum]{Nel terzo capitolo}}] viene descritta le \enquote*{blockchain di seconda generazione} basata sull'utilizzo degli Smart Contract. Viene quindi descritto il funzionamento della blockchain Ethereum, contrapposta alla blockchain \enquote*{classica}, facendo riferimento alle potenzialità degli Smart Contract per la realizzazione di applicazioni decentralizzate complesse.
+	%5
+	\item[{\hyperref[cap:quorum]{Nel quarto capitolo}}] viene descritta la blockchain privata basata su Ethereum (e sugli Smart Contract) utilizzata nella progettazione dell'applicazione decentralizzata. Il capitolo mostra lo studio realizzato su questo software Ethereum based, denominato \enquote*{Quorum} in relazione alle caratteristiche di sicurezza e privacy che va ad aggiungere rispetto alle blockchain pubbliche come Ethereum
+	%6
+	\item[{\hyperref[cap:strumenti]{Nel quinto capitolo}}] vengono descritti tutti gli strumenti studiati ed utilizzati nell'implementazione dell'applicazione decentralizzata. Gli strumenti riguardano il linguaggio di programmazione orientato ai contratti ed i framework utilizzati per lo sviluppo.
+	%7
+	\item[{\hyperref[cap:configurazione]{Nel sesto capitolo}}] viene descritto il procedimento di configurazione dell'ambiente di sviluppo. Vengono mostrati i passi per configurare i framework utilizzati che sono stati descritti nel capitolo precedente e viene anche mostrato il procedimento utilizzato per configurare correttamente un'istanza della blockchain Quorum per utilizzarla nell'implementazione
+	%8
+	\item[{\hyperref[cap:implementazione]{Nel settimo capitolo}}] viene descritta l'architettura dell'applicazione e le funzionalità offerte.
+	%9
+	\item[{\hyperref[cap:conclusioni]{Nel settimo capitolo}}] vengono riassunte le considerazioni a livello di sicurezza dell'applicazione e le scelte prese nell'ambito dello sviluppo e dell'implementazione e le conclusioni.
+	%
+\end{description}
+%

@@ -1,0 +1,190 @@
+%
+% !TEX encoding = UTF-8 Unicode
+% !TEX TS-program = pdflatex
+% !TEX root = Tesi.tex
+% !TEX spellcheck = it-IT
+%
+% 	PREAMBOLO
+%
+\documentclass[12pt,	% 10-11-12pt (12pt preferibile)
+	a4paper,		%
+	twoside,		% or oneside
+	openright,		% new chapter in odd page
+	titlepage,	 	% 
+	]{book}%
+%
+\usepackage[T1]{fontenc}		% output
+%
+\usepackage[utf8]{inputenc}		% input. Also [latin1] 
+%
+\usepackage[english,italian]{babel}	% default italian
+%
+\usepackage{microtype}		% micro-tipografia
+%
+% 	LAYOUT - MARGINI - RILEGATURA
+%
+\usepackage[binding=5mm]{layaureo} 	% margins optimized for A4; 5 mm binding
+%
+\usepackage{emptypage}		% empty page without header and footer
+%
+\usepackage{indentfirst}	% indent first paragraph of every section
+%
+% \usepackage{booktabs}		% tables (\toprule, \midrule, \bottomrule). Uncomment if necessary
+%
+% \usepackage{tabularx}		% Uncomment if necessary
+%
+\usepackage{graphicx}		% image
+%
+\usepackage[figuresright]{rotating}	% tables at 90°
+%
+% \usepackage{subfig}			% subfigures, subtables. Uncomment if necessary
+%
+\usepackage{caption}		% captions
+%
+\usepackage{listings}		% piece of code
+%
+\usepackage[font=small]{quoting}	% citation
+%
+% \usepackage{amsmath,amssymb}	% math
+%
+% \usepackage{mathtools}		% math
+%
+% \usepackage{amsthm}		% math
+%
+\usepackage[output-decimal-marker={,}]{siunitx}	
+%
+\usepackage[italian]{varioref}	
+%
+\usepackage{relsize}			% make text larger or smaller than the surrounding text
+%
+\usepackage{csquotes} %italian=guillemets
+%
+\usepackage{hyperref}
+%
+\usepackage[style=ieee,	
+	sorting = none,		% reorder bib entries
+	backref,			% back ref citations
+	natbib=true, 		% compatibility with natbib
+	hyperref,
+	backend=bibtex,		% bib engine
+	defernumbers=true,	% citation order inside text
+	]{biblatex}%
+%
+\bibliography{Bibliografia}
+%
+\usepackage[dvipsnames]{xcolor}	% colori - 68 colori predefiniti:
+% 				% http://en.wikibooks.org/wiki/LaTeX/Colors
+%
+\usepackage{lipsum}			% lorem ipsum
+%
+\usepackage{eurosym}		% Euro symbol
+%
+\usepackage{hyperref}		% 
+%
+\usepackage{bookmark}		% 
+%
+\usepackage{guit}			% Guit symbol
+%
+\usepackage{fancyhdr}		% custom header and footer
+%
+\setlength{\headheight}{15pt}
+%
+\usepackage{colortbl}		% per colorare i filetti delle tabelle
+%
+\usepackage[footnote,		% descrizione acronimo fatta a piè di pagina
+	smaller,			% acronimo scritto con dimensione ridotta
+	]{acronym}		% acronimi
+%
+% \usepackage{multirow}		% celle tabelle alte più di una riga
+%
+\usepackage{pdfpages}		% inclusione di files pdf esterni
+%
+\usepackage{setspace}		% imposto l'interlinea del documento
+%
+\linespread{1.2}
+%
+\usepackage[nottoc,numbib]{tocbibind}	
+%
+\usepackage{gensymb}
+%
+\usepackage{float}
+%
+\usepackage[xindy,toc,nonumberlist]{glossaries}	% includo il glossario
+%
+\makeglossaries
+%
+\input{BackMAtter/Glossary}
+%
+\glstoctrue
+%
+\input{ImpostazioniTesi}		% file con altre impostazioni
+%
+% ------------------------------------------------------------------------ %
+% 	BEGIN DOCUMENT
+% ------------------------------------------------------------------------ %
+%
+\begin{document}
+%
+% ------------------------------------------------------------------------ %
+% 	FRONTMATTER
+% ------------------------------------------------------------------------ %
+%
+\frontmatter
+%
+\includepdf{AltroMateriale/frontespizio.pdf}
+%
+\input{FrontMatter/Indici}
+%
+\cleardoublepage
+%
+% ------------------------------------------------------------------------ %
+% 	MAINMATTER
+% ------------------------------------------------------------------------ %
+%
+\mainmatter
+%
+\input{MainMatter/Introduzione}
+%
+\input{MainMatter/SanitaDigitale}
+%
+\input{MainMatter/Blockchain}
+%
+\input{MainMatter/Ethereum} 
+%
+\input{MainMatter/Quorum} 
+%
+\input{MainMatter/StrumentiSviluppo} 
+%
+\input{MainMatter/Configurazione}
+%
+\input{MainMatter/Implementazione} 
+%
+\input{MainMatter/Conclusioni} 
+%
+\appendix
+%
+\input{MainMatter/Appendice1}
+%
+\input{MainMatter/Appendice2} 
+%
+\input{MainMatter/Appendice3} 
+%
+\input{MainMatter/Appendice4}
+%
+% ------------------------------------------------------------------------ %
+% 	BACKMATTER
+% ------------------------------------------------------------------------ %
+%
+\cleardoublepage
+%
+\backmatter
+%
+\printglossaries
+% 
+\printbibliography
+%
+\addcontentsline{toc}{chapter}{Bibliografia}
+%
+\input{FrontMatter/Ringraziamenti}
+%
+\end{document}

@@ -1,0 +1,50 @@
+% ------------------------------------------------------------------------ %
+% !TEX encoding = UTF-8 Unicode
+% !TEX TS-program = pdflatex
+% !TEX root = ../Tesi.tex
+% !TEX spellcheck = it-IT
+% ------------------------------------------------------------------------ %
+%
+% ------------------------------------------------------------------------ %
+% 	NOME APPENDICE 2
+% ------------------------------------------------------------------------ %
+%
+\chapter{Schema transazioni Quorum}
+%
+\label{cap:transaction}
+%
+La figura mostra come viene processata una transazione privata in Quorum:
+%
+\begin{figure}[H]
+	%
+	\centering
+	%
+	\includegraphics[width=.9\textwidth]{Quorum/transaction}
+	%
+	\caption{Schema di una transazione privata Quorum}
+	%
+	\label{fig:schema di una transazione privata quorum}
+	%
+\end{figure}
+%
+\begin{enumerate}
+	\item il party A invia una transazione al proprio nodo Quorum, specificando il payload della transazione e settando il \enquote*{privateFor} con la chiave pubblica per i gruppi A e B.
+	\item il nodo Quorum del party A passa la transazione al relativo gestore delle transazioni, richiedendogli di memorizzare il payload.
+	\item il transaction manager del party A chiama il proprio Enclave associato per validare il mittente e crittare il payload.
+	\item l'Enclave del party A controlla la chiave privata\footnote{\gls{asimmetrica}} del party A e, una volta validata, effettua la conversione della transazione. Questo comporta: 
+	      \begin{enumerate}
+	      	\item generazione di chiave simmetrica e random nonce.
+	      	\item crittografia del payload della transazione e del nonce con la chiave simmetrica dello step precedente.
+	      	\item calcolo SHA3-512 del payload del passo precedente.
+	      	\item iterazione attraverso la lista dei destinatari della transazione, in questo caso i party A e B, crittando la chiave simmetrica dello step precedente con la chiave pubblica del destinatario (PGP). 
+	      	\item viene ritornato il payload crittografato allo step 4.2, l'hash dello step 4.3 e la chiave crittografata (per ogni destinatario) dello step precedente al transaction manager.
+	      \end{enumerate}
+	\item il transaction manager del party A immagazzina il payload (criptato con la chiave simmetrica) e la chiave simmetrica criptata utilizzando l'hash come indice e poi trasferendo in modo sicuro: hash, payload criptato e la chiave simmetrica criptata con la chiave pubblica del party B al transaction manager del party B. Quest'ultimo risponderà con una risposta di tipo ack/nack. Se il party A non riceve risposta o riceve nack dal party B allora la transazione non sarà propagata nella rete.
+	\item una volta che la trasmissione dei dati al transaction manager del party B ha avuto successo il transaction manager del party A ritorna l'hash al nodo Quorum, il quale hash va a rimpiazzare il payload originale della transazione e cambia il valore \emph{V} della transazione in 37 o 38. Questo valore indicherà agli altri nodi che questo hash rappresenta una transazione privata con un payload associato criptato.
+	\item a questo punto la transazione è propagata al resto della rete utilizzando il protocollo P2P standard di Ethereum.
+	\item un blocco contenente la transazione AB è creato e distribuito ad ogni party sulla rete.
+	\item Elaborando il blocco tutti i party proveranno a processare la transazione. Ogni nodo Quorum riconoscerà un valore \emph{V} di 37 o 38, identificandola quindi come transazione il cui payload deve essere decrittato, ed effettuerà una chiamata al proprio transaction manager per determinare se possiedono la transazione (utilizzando l'hash come indice per cercare).
+	\item dato che il party C non possiede la transazione riceverà un messaggio \enquote*{NotRecipient} e salterà la transazione non aggiornando il suo stateDb privato. Invece la ricerca da parte dei party A e B avrà esito positivo identificando quindi il fatto che posseggono la transazione e procederanno a chiamare il proprio Enclave passando il payload criptato, la chiave simmetrica criptata e la firma.
+	\item Enclave valida la firma e poi decritta la chiave simmetrica utilizzando la chiave privata del party (posseduta da Enclave) , decritta il payload della transazione utilizzando la chiave simmetrica appena ottenuta e ritorna il payload decrittato al transaction manager.
+	\item il transaction manager dei party A e B allora invia il payload decrittato all'EVM per l'esecuzione del codice del contratto. Questa esecuzione aggiornerà solo il private stateDB del nodo Quorum. Una volta che il codice è stato eseguito, viene eliminato per far sì che non sia disponibile a meno di rieseguire il processo di decrittazione
+\end{enumerate}
